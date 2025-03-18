@@ -52,6 +52,10 @@ Instructions:
 1. Make sure the [AnkiWebView Inspector](https://ankiweb.net/shared/info/31746032) add-on is installed.
 1. Right-click on any element in a preview window and select _Inspect_
 
+## See also
+
+- [KanjiAPI Notes](#kanjiapi.md)
+
 ## Dev notes
 
 ### 2025-03-18
