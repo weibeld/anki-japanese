@@ -2,13 +2,15 @@
 
 Anki deck package for Japanese words.
 
-## Export
+## Export and import
 
-_Anki > Notes > Export Notes..._
+Export:
 
-## Import
+> _Anki > Notes > Export Notes..._
 
-Double-click on `anki-japanese.apkg` file and follow import instructions.
+Import:
+
+> Double-click on `anki-japanese.apkg` file and follow import instructions.
 
 ## Custom fonts
 
@@ -44,3 +46,17 @@ Instructions:
 2025-03-02 installed font:
 
 - [Kanji stroke order font v4.004](https://sites.google.com/site/nihilistorguk/)
+
+## Debugging
+
+1. Make sure the [AnkiWebView Inspector](https://ankiweb.net/shared/info/31746032) add-on is installed.
+1. Right-click on any element in a preview window and select _Inspect_
+
+## Dev notes
+
+### 2025-03-18
+
+- Regarding incorporation of KanjiAPI (<https://kanjiapi.dev/>) data in cards
+  - Cannot make JavaScript web requests from cards (sandboxed environment)
+  - Complete KanjiAPI data is 98 MB in size and contains 13,108 kanjis
+  - Envisioned solution: split KanjiAPI data into separate files (one file for each kanji), place these files in Anki's media folder, then access the relevant files from the cards.
