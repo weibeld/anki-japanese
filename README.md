@@ -23,7 +23,7 @@ Anki collection package for learning Japanese:
 1. Select the `japanese.colpkg` file
 1. Follow import dialog
 
-> **Note:** the above will replace the entire local Anki content with the content of the imported `.colpkg` file.
+> **Note:** the above will replace the entire local Anki content with the content of the imported `.colpkg` file (however, existing media in the [media folder](https://docs.ankiweb.net/files.html#file-locations) is not deleted, see [documentation](https://docs.ankiweb.net/exporting.html#collection-colpkg)).
 
 ## JavaScript debugging
 
@@ -129,6 +129,24 @@ cat data-clean.json | jq -r '.[] | "\(.key)=\(.value)"' |
 ```
 
 > **Note:** the above creates a separate JSON file for each entry. The file name is `<kanji>.json` (e.g. `日.json`) and the content is the the KanjiAPI data for the corresponding kanji.
+
+## Notes
+
+### Export: Collection Package (.colpkg) vs. Deck Package (.apkg)
+
+See [documentation](https://docs.ankiweb.net/exporting.html):
+
+- A Collection Package exports all decks and all media (even the media that is not used in any cards)
+- A Deck Package exports either all or only a single deck
+- A Collection Package exports all media in the [media folder](https://docs.ankiweb.net/files.html#file-locations), even files that are not used by any card
+- A Deck Package exports only the media that is used in any of the cards of the exported decks
+- When importing a Collection Package, all existing Anki content is replaced with the content of the Collection Package
+  - Except the existing media in the [media folder](https://docs.ankiweb.net/files.html#file-locations), which is not deleted before importing (see [documentation](https://docs.ankiweb.net/exporting.html#collection-colpkg))
+- When importing a Deck Package, the contained deck(s) is/are added to the existing collection
+- The idea of a Collection Package is to export and import the entire Anki content (e.g. for sharing or backup)
+  - In the case of sharing, a Collection Package may, for example, be imported into a separate [profile](https://docs.ankiweb.net/profiles.html) in Anki
+- The idea of a Deck Package is to export individual decks, mainly for sharing
+  - A Deck Package can be imported into an existing collection
 
 ## Dev log
 
