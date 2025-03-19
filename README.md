@@ -1,8 +1,11 @@
 # Anki Japanese
 
-Anki collection package for learning Japanese:
+Anki deck with sub-decks for learning Japanese:
 
 1. Vocabulary
+   1. `vocab-read`
+   1. `vocab-speak`
+   1. `vocab-write`
 1. Kanji
 1. Grammar
 
@@ -11,19 +14,23 @@ Anki collection package for learning Japanese:
 **Export:**
 
 1. _Anki > File > Export..._
-   - Export format: _Anki Collection Package (.colpkg)_
-   - Include: _Include media_
+   - Export format: _Anki Deck Package (.apkg)_
+   - Include: `japanese`
+   - Uncheck _Include scheduling information_
 1. Click _Export..._
 
 > **Note:** the above has to be done from the main Anki window (small window showing all decks), not from the _Browse_ window (which shows all notes, note types, etc.).
 
 **Import:**
 
-1. _Anki > File > Import..._
-1. Select the `japanese.colpkg` file
-1. Follow import dialog
-
-> **Note:** the above will replace the entire local Anki content with the content of the imported `.colpkg` file (however, existing media in the [media folder](https://docs.ankiweb.net/files.html#file-locations) is not deleted, see [documentation](https://docs.ankiweb.net/exporting.html#collection-colpkg)).
+1. Import deck
+   - _Anki > File > Import..._
+   - Select the `japanese.apkg` file
+   - Follow import dialog
+1. Install media files
+   - Copy content of [`media`](media) folder into the Anki [media folder](https://docs.ankiweb.net/files.html#file-locations) (`~/Library/Application\ Support/Anki2/User\ 1/collection.media`)
+   
+> **Note:** the above will add the `japanese` deck to the current collection.
 
 ## JavaScript debugging
 
@@ -124,11 +131,11 @@ cat data.json | jq '[ .[] | select(.value.unihan_cjk_compatibility_variant == nu
 ```bash
 cat data-clean.json | jq -r '.[] | "\(.key)=\(.value)"' |
   while IFS='=' read key value; do
-    echo "$value" >"$key".json
+    echo "$value" >_japanese_"$key".json
   done
 ```
 
-> **Note:** the above creates a separate JSON file for each entry. The file name is `<kanji>.json` (e.g. `日.json`) and the content is the the KanjiAPI data for the corresponding kanji.
+> **Note:** the above creates a separate JSON file for each entry. The file name is `_japanese_<kanji>.json` (e.g. `_japanese_日.json`) and the content is the the KanjiAPI data for the corresponding kanji.
 
 ## Notes
 
