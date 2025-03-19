@@ -150,6 +150,19 @@ See [documentation](https://docs.ankiweb.net/exporting.html):
 
 ## Dev log
 
+### 2025-03-19
+
+- Media
+  - Prepend `_` KanjiAPI JSON files in media folder to prevent Anki from listing them as "unused files" in the Check Media window (see [documentation](https://docs.ankiweb.net/media.html#checking-media))
+  - To distinguish the media of this project in the media folder from media from other decks:
+    - Subfolders in the media folder are not allowed (there will be a corresponding message in the Check Media window when attempting to do so)
+    - Solution: add common prefix to all media of this project (currently `_japanese_*`)
+- Sharing strategy
+  - Parent deck `japanese` with all specific decks (`vocab-read`, `vocab-write`, etc.) as sub-decks
+  - Export parent deck as Deck Package (`.apkg`). This is the usual way for sharing decks on [Shared Decks](https://ankiweb.net/shared/decks) (see [documentation](https://docs.ankiweb.net/contrib.html#sharing-decks-publicly)).
+  - KanjiAPI data files are regarded by Anki as "unused" (because they are accessed by JavaScript and not referenced directly in the note fields). Therefore, request these data files to be installed separately in the media folder by potential users.
+    - The custom font seems to be included in the Deck Package (`.apkg`) even though it's only referenced from CSS too
+
 ### 2025-03-18
 
 - Regarding incorporation of KanjiAPI (<https://kanjiapi.dev/>) data in cards
