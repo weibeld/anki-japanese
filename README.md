@@ -8,16 +8,16 @@ Anki collection package for learning Japanese:
 
 ## Export and import
 
-Export:
+**Export:**
 
 1. _Anki > File > Export..._
-  - Export format: _Anki Collection Package (.colpkg)_
-  - Include: _Include media_
-1. _Export..._
+   - Export format: _Anki Collection Package (.colpkg)_
+   - Include: _Include media_
+1. Click _Export..._
 
 > **Note:** the above has to be done from the main Anki window (small window showing all decks), not from the _Browse_ window (which shows all notes, note types, etc.).
 
-Import:
+**Import:**
 
 1. _Anki > File > Import..._
 1. Select the `japanese.colpkg` file
@@ -32,28 +32,28 @@ Import:
 
 ## Custom fonts
 
-Custom fonts can be installed directly into Anki. In that case, they will be automatically synced to AnkiDroid too.
+Custom fonts can be installed directly into Anki. In that case, they will be automatically synced to AnkiDroid too:
 
-To install and use a custom font, proceed as follows:
-
-1. Prepend an underscore to the font's `.ttf` file and copy it into `~/Library/Application\ Support/Anki2/User\ 1/collection.media`
+1. Download the font as a `.ttf` file
+1. Prepend an underscore to file name and copy it into the [media folder](https://docs.ankiweb.net/files.html#file-locations)
    - For example:
      ```
-     ~/Library/Application\ Support/Anki2/User\ 1/collection.media/_KanjiStrokeOrders_v4.004.ttf
+     mv KanjiStrokeOrders_v4.004.ttf _KanjiStrokeOrders_v4.004.ttf
+     mv _KanjiStrokeOrders_v4.004.ttf ~/Library/Application\ Support/Anki2/User\ 1/collection.media
      ```
-1. In the CSS file of the card templates, declare the custom font as follows:
+1. Declare the font in the card template CSS as follows:
     ```css
     @font-face {
       font-family: MyName;
       src: url("_KanjiStrokeOrders_v4.004.ttf");
     }
     ```
-1. Now, you can use the font in the CSS file as follows:
+
+    > **Note:** `MyName` may be any arbitrary name.
+1. Use the font in the card template CSS as follows:
     ```css
     font-family: MyName;
     ```
-
-> **Note:** `MyName` may be any arbitrary name.
 
 Resources:
 
@@ -62,15 +62,17 @@ Resources:
 
 ## KanjiAPI data
 
-Kanji data (readings, meanings, JLPT level, etc.) is obtained from <https://kanjiapi.dev/>:
+Kanji data (readings, meanings, JLPT level, etc.) is obtained from [KanjiAPI](https://kanjiapi.dev/):
 
 - Base URL: <https://kanjiapi.dev/v1/kanji/>
   - Example: <https://kanjiapi.dev/v1/kanji/日>
 - Full data: <https://kanjiapi.dev/kanjiapi_full.zip>
 
-A static copy of the full API data is stored in the [media folder](https://docs.ankiweb.net/files.html#file-locations), split into individual files for each kanji.
+The data is used by storing a static copy of the full API data (split into individual files per kanji) in the [media folder](https://docs.ankiweb.net/files.html#file-locations).
 
-### Full data format
+### Data format
+
+The format of the downloadable full API data (see above) is as follows:
 
 ```json
 {
@@ -82,11 +84,11 @@ A static copy of the full API data is stored in the [media folder](https://docs.
 }
 ```
 
-> **Note:** the `{...}` objects are the objects returned by the above API endpoint.
+> **Note:** the `{...}` objects are the objects returned by the `/kanji/` API endpoint.
 
-### Processing commands
+### Data processing commands
 
-Transforming into list:
+**Transforming into list:**
 
 ```bash
 cat kanjiapi_full.json | jq '.kanjis | to_entries' >data.json
@@ -94,7 +96,7 @@ cat kanjiapi_full.json | jq '.kanjis | to_entries' >data.json
 
 > **Note:** this transforms the KanjiAPI data into a JSON list of objects with `"key"` and `"value"` fields, where `"key"` is the kanji and `"value"` is the  API entry for that kanji. This makes the further processing simpler.
 
-Counting entries:
+**Counting entries:**
 
 ```bash
 cat data.json | jq length
@@ -102,14 +104,14 @@ cat data.json | jq length
 
 > **Note:** at the time of this writing, there were 13,108 entries in the data.
 
-Listing CJK Compatibility code block entries:
+**Listing CJK Compatibility code block entries:**
 
 ```bash
 cat data.json | jq '[ .[] | select(.value.unihan_cjk_compatibility_variant) ]'
 ```
 > **Note:** the above command lists all entries with the `unihan_cjk_compatibility_variant` field. At the time of this writing, 75 of the 13,108 entries have this field. Entries with this field are code points in the [CJK Compatibility](https://en.wikipedia.org/wiki/CJK_Compatibility) code block. These kanjis already have a coresponding "real" kanji in the data and they are regarded as duplicates of these "real" kanjis by many text processors (see [KanjiAPI documentation](https://github.com/onlyskin/kanjiapi.dev?tab=readme-ov-file#list-of-jinmeiyo-kanji)). Therefore, it's best to filter out all the entries with the `unihan_cjk_compatibility_variant` field.
 
-Filtering out CJK Compatibility code block entries:
+**Filtering out CJK Compatibility code block entries:**
 
 ```bash
 cat data.json | jq '[ .[] | select(.value.unihan_cjk_compatibility_variant == null) ]' >data-clean.json
@@ -117,7 +119,7 @@ cat data.json | jq '[ .[] | select(.value.unihan_cjk_compatibility_variant == nu
 
 > **Note:** the above creates a cleaned data set which does not contain any entries with the `unihan_cjk_compatibility_variant` field. At the time of this writing, 13,033 entries remain in this cleaned data set.
 
-Splitting into files:
+**Splitting into files:**
 
 ```bash
 cat data-clean.json | jq -r '.[] | "\(.key)=\(.value)"' |
