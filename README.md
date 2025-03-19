@@ -7,7 +7,15 @@ Anki deck with sub-decks for learning Japanese:
    1. `vocab-speak`
    1. `vocab-write`
 1. Kanji
+   - TODO: kanji to keyword (keyword: Heisig and possibly own)
+   - TODO: keyword to kanji
+   - TODO: kanji to kaki-kata
+   - Radicals (not priority)
+     - Radical to keyword
+     - Keyword to radical
+     - Kanji to radical (both 214 and 69)
 1. Grammar
+   - TODO: grammar item to explanation
 
 ## Export and import
 
