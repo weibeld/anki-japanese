@@ -47,27 +47,28 @@ Anki deck with sub-decks for learning Japanese:
 1. Make sure the [AnkiWebView Inspector](https://ankiweb.net/shared/info/31746032) add-on is installed
 1. In the card preview window, right-click on any element in a preview window and select _Inspect_
 
-## Custom fonts
+## Custom font
 
-Custom fonts can be installed directly into Anki. In that case, they will be automatically synced to AnkiDroid too:
+[Kanji stroke order font v4.004](https://sites.google.com/site/nihilistorguk/) is included in the `japanese.apkg` file and thus will be installed in the local Anki copy when the deck is imported (this font will also be automatically synced to AnkiDroid).
+
+To manually install a custom font into Anki, proceed as follows:
 
 1. Download the font as a `.ttf` file
-1. Prepend an underscore to file name and copy it into the [media folder](https://docs.ankiweb.net/files.html#file-locations)
+1. Move the `.ttf` file into the [Anki media folder](https://docs.ankiweb.net/files.html#file-locations) by prepending an underscore to the file name:
    - For example:
      ```
-     mv KanjiStrokeOrders_v4.004.ttf _KanjiStrokeOrders_v4.004.ttf
-     mv _KanjiStrokeOrders_v4.004.ttf ~/Library/Application\ Support/Anki2/User\ 1/collection.media
+     mv KanjiStrokeOrders_v4.004.ttf ~/Library/Application\ Support/Anki2/User\ 1/collection.media/_KanjiStrokeOrders_v4.004.ttf
      ```
-1. Declare the font in the card template CSS as follows:
+     > **Note:** the underscore causes the file to be ignored by the Anki _Check Media_ function.
+1. Declare the font in the card template CSS:
     ```css
     @font-face {
       font-family: MyName;
       src: url("_KanjiStrokeOrders_v4.004.ttf");
     }
     ```
-
     > **Note:** `MyName` may be any arbitrary name.
-1. Use the font in the card template CSS as follows:
+1. Use the font in the card template CSS:
     ```css
     font-family: MyName;
     ```
@@ -79,7 +80,7 @@ Resources:
 
 ## Kanji data
 
-Kanji data in [`collection.media`](collection.media) has been sourced from [kanjiapi.dev](https://kanjiapi.dev/):
+The kanji data in [`collection.media`](collection.media) has been sourced from [kanjiapi.dev](https://kanjiapi.dev/):
 
 - Base URL: <https://kanjiapi.dev/v1/kanji/>
 - Example request: <https://kanjiapi.dev/v1/kanji/日>
@@ -145,7 +146,7 @@ cat data-clean.json | jq -r '.[] | "\(.key)=\(.value)"' |
 
 ## Notes
 
-### Export: Collection Package (.colpkg) vs. Deck Package (.apkg)
+### Collection Package (.colpkg) vs. Deck Package (.apkg)
 
 See [documentation](https://docs.ankiweb.net/exporting.html):
 
@@ -160,6 +161,10 @@ See [documentation](https://docs.ankiweb.net/exporting.html):
   - In the case of sharing, a Collection Package may, for example, be imported into a separate [profile](https://docs.ankiweb.net/profiles.html) in Anki
 - The idea of a Deck Package is to export individual decks, mainly for sharing
   - A Deck Package can be imported into an existing collection
+
+### Media folder
+
+Some files in the Anki media folder will be automatically included in the `.apkg` file when exporting the deck. This includes the custom font file and the JavaScript file. 
 
 ## Dev log
 
