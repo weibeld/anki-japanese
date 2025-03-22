@@ -23,9 +23,9 @@ Anki deck with sub-decks for learning Japanese:
 
 1. _Anki > File > Export..._
    - Export format: _Anki Deck Package (.apkg)_
-   - Include: `japanese`
-   - Uncheck _Include scheduling information_
-1. Click _Export..._
+   - Include: `japanese` deck
+   - Uncheck _Include scheduling information_ and check _Include media_
+1. Click _Export..._ and save as `japanese.apkg`
 
 > **Note:** the above has to be done from the main Anki window (small window showing all decks), not from the _Browse_ window (which shows all notes, note types, etc.).
 
@@ -33,12 +33,14 @@ Anki deck with sub-decks for learning Japanese:
 
 1. Import deck
    - _Anki > File > Import..._
-   - Select the `japanese.apkg` file
+   - Select `japanese.apkg`
    - Follow import dialog
-1. Install media files
-   - Copy content of [`media`](media) folder into the Anki [media folder](https://docs.ankiweb.net/files.html#file-locations) (`~/Library/Application\ Support/Anki2/User\ 1/collection.media`)
-   
-> **Note:** the above will add the `japanese` deck to the current collection.
+1. Install kanji data files
+   - Copy content of [`collection.media`](collection.media) to the Anki [media folder](https://docs.ankiweb.net/files.html#file-locations):
+   ```bash
+   cp collection.media/* ~/Library/Application\ Support/Anki2/User\ 1/collection.media
+   ```
+> **Note:** the above will add the deck to the current collection.
 
 ## JavaScript debugging
 
@@ -75,19 +77,15 @@ Resources:
 - Anki: <https://docs.ankiweb.net/templates/styling.html#installing-fonts>
 - AnkiDroid: <https://ankidroid.org/manual.html#customFonts>
 
-## KanjiAPI data
+## Kanji data
 
-Kanji data (readings, meanings, JLPT level, etc.) is obtained from [KanjiAPI](https://kanjiapi.dev/):
+Kanji data in [`collection.media`](collection.media) has been sourced from [kanjiapi.dev](https://kanjiapi.dev/):
 
 - Base URL: <https://kanjiapi.dev/v1/kanji/>
-  - Example: <https://kanjiapi.dev/v1/kanji/日>
-- Full data: <https://kanjiapi.dev/kanjiapi_full.zip>
+- Example request: <https://kanjiapi.dev/v1/kanji/日>
+- Full data download: <https://kanjiapi.dev/kanjiapi_full.zip>
 
-The data is used by storing a static copy of the full API data (split into individual files per kanji) in the [media folder](https://docs.ankiweb.net/files.html#file-locations).
-
-### Data format
-
-The format of the downloadable full API data (see above) is as follows:
+The format of the full data file is as follows:
 
 ```json
 {
@@ -99,9 +97,9 @@ The format of the downloadable full API data (see above) is as follows:
 }
 ```
 
-> **Note:** the `{...}` objects are the objects returned by the `/kanji/` API endpoint.
+> **Note:** the `{...}` objects correspond to the data returned by the above `/kanji/` API endpoint.
 
-### Data processing commands
+The kanji data files in [`collection.media`](collection.media) have been obtained from the full data file via the following processing commands.
 
 **Transforming into list:**
 
@@ -109,7 +107,7 @@ The format of the downloadable full API data (see above) is as follows:
 cat kanjiapi_full.json | jq '.kanjis | to_entries' >data.json
 ```
 
-> **Note:** this transforms the KanjiAPI data into a JSON list of objects with `"key"` and `"value"` fields, where `"key"` is the kanji and `"value"` is the  API entry for that kanji. This makes the further processing simpler.
+> **Note:** this transforms the kanjiapi.dev data into a JSON list of objects with `"key"` and `"value"` fields, where `"key"` is the kanji and `"value"` is the  API entry for that kanji. This makes the further processing simpler.
 
 **Counting entries:**
 
@@ -124,7 +122,7 @@ cat data.json | jq length
 ```bash
 cat data.json | jq '[ .[] | select(.value.unihan_cjk_compatibility_variant) ]'
 ```
-> **Note:** the above command lists all entries with the `unihan_cjk_compatibility_variant` field. At the time of this writing, 75 of the 13,108 entries have this field. Entries with this field are code points in the [CJK Compatibility](https://en.wikipedia.org/wiki/CJK_Compatibility) code block. These kanjis already have a coresponding "real" kanji in the data and they are regarded as duplicates of these "real" kanjis by many text processors (see [KanjiAPI documentation](https://github.com/onlyskin/kanjiapi.dev?tab=readme-ov-file#list-of-jinmeiyo-kanji)). Therefore, it's best to filter out all the entries with the `unihan_cjk_compatibility_variant` field.
+> **Note:** the above command lists all entries with the `unihan_cjk_compatibility_variant` field. At the time of this writing, 75 of the 13,108 entries have this field. Entries with this field are code points in the [CJK Compatibility](https://en.wikipedia.org/wiki/CJK_Compatibility) code block. These kanjis already have a coresponding "real" kanji in the data and they are regarded as duplicates of these "real" kanjis by many text processors (see [kanjiapi.dev documentation](https://github.com/onlyskin/kanjiapi.dev?tab=readme-ov-file#list-of-jinmeiyo-kanji)). Therefore, it's best to filter out all the entries with the `unihan_cjk_compatibility_variant` field.
 
 **Filtering out CJK Compatibility code block entries:**
 
@@ -143,7 +141,7 @@ cat data-clean.json | jq -r '.[] | "\(.key)=\(.value)"' |
   done
 ```
 
-> **Note:** the above creates a separate JSON file for each entry. The file name is `_japanese_<kanji>.json` (e.g. `_japanese_日.json`) and the content is the the KanjiAPI data for the corresponding kanji.
+> **Note:** the above creates a separate JSON file for each entry. The file name is `_japanese_<kanji>.json` (e.g. `_japanese_日.json`) and the content is the the kanjiapi.dev data for the corresponding kanji.
 
 ## Notes
 
@@ -168,22 +166,22 @@ See [documentation](https://docs.ankiweb.net/exporting.html):
 ### 2025-03-19
 
 - Media
-  - Prepend `_` KanjiAPI JSON files in media folder to prevent Anki from listing them as "unused files" in the Check Media window (see [documentation](https://docs.ankiweb.net/media.html#checking-media))
+  - Prepend `_` kanjiapi.dev JSON files in media folder to prevent Anki from listing them as "unused files" in the Check Media window (see [documentation](https://docs.ankiweb.net/media.html#checking-media))
   - To distinguish the media of this project in the media folder from media from other decks:
     - Subfolders in the media folder are not allowed (there will be a corresponding message in the Check Media window when attempting to do so)
     - Solution: add common prefix to all media of this project (currently `_japanese_*`)
 - Sharing strategy
   - Parent deck `japanese` with all specific decks (`vocab-read`, `vocab-write`, etc.) as sub-decks
   - Export parent deck as Deck Package (`.apkg`). This is the usual way for sharing decks on [Shared Decks](https://ankiweb.net/shared/decks) (see [documentation](https://docs.ankiweb.net/contrib.html#sharing-decks-publicly)).
-  - KanjiAPI data files are regarded by Anki as "unused" (because they are accessed by JavaScript and not referenced directly in the note fields). Therefore, request these data files to be installed separately in the media folder by potential users.
+  - kanjiapi.dev data files are regarded by Anki as "unused" (because they are accessed by JavaScript and not referenced directly in the note fields). Therefore, request these data files to be installed separately in the media folder by potential users.
     - The custom font seems to be included in the Deck Package (`.apkg`) even though it's only referenced from CSS too
 
 ### 2025-03-18
 
-- Regarding incorporation of KanjiAPI (<https://kanjiapi.dev/>) data in cards
+- Regarding incorporation of kanjiapi.dev (<https://kanjiapi.dev/>) data in cards
   - Cannot make JavaScript web requests from cards (sandboxed environment)
-  - Complete KanjiAPI data is 98 MB in size and contains 13,108 kanjis
-  - Envisioned solution: split KanjiAPI data into separate files (one file for each kanji), place these files in Anki's media folder, then access the relevant files from the cards.
+  - Complete kanjiapi.dev data is 98 MB in size and contains 13,108 kanjis
+  - Envisioned solution: split kanjiapi.dev data into separate files (one file for each kanji), place these files in Anki's media folder, then access the relevant files from the cards.
 
 ### 2025-03-02
 
