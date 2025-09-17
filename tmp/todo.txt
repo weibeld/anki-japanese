@@ -1,0 +1,5 @@
+    - Regenerate kanji data with updated JLPT values from API
+- In 'reading' cards, think about moving furigana to answer on back side
+- Use https://github.com/kerrickstaley/genanki to programmatically create .apkg file from local copies of card templates, CSS and JavaScript files as well as the notes and note types from the Anki database (extract notes and note types from the Anki database and create the .apkg file together with the local files).
+    - Maybe these files can be inserted manually into the Anki database to apply these changes (there could be a command to apply the changes to the local Anki copy, and a GitHub action to create the .apkg file)
+    - Check add-ons first (e.g. AnkiConnect, Templates Import / Export, etc.)
