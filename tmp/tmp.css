@@ -1,0 +1,208 @@
+/* Variables */
+:root {
+  --color-question: rgb(255, 253, 184);
+  --color-answer: rgb(212, 252, 212);
+  --color-shaded: gray;
+  --color-on-reading: lightpink;
+  --color-kun-reading: lightblue;
+  --grid-gap: 0.25rem;
+}
+
+/* Kanji stroke order font (https://www.nihilist.org.uk/) */
+@font-face {
+  font-family: kanji-stroke-order;
+  src: url("_japanese_KanjiStrokeOrders_v4.004.ttf");
+}
+
+.card {
+  font-family: verdana, sans-serif;
+  text-align: center;
+  background-color: white;
+  /* Avoid overriding text colour by colour theme on AnkiDroid */
+  color: black !important;
+}
+
+/* Outermost container of card */
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--grid-gap);
+}
+
+/*----------------------------------------------------------------------------*
+ * Question/answer boxes
+ *----------------------------------------------------------------------------*/
+.box {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 1.25rem;
+}
+
+.question {
+  background-color: var(--color-question);
+}
+
+.answer {
+  background-color: var(--color-answer);
+}
+
+/*----------------------------------------------------------------------------*
+ * Text
+ *----------------------------------------------------------------------------*/
+.text-box-small {
+  font-size: 1.2rem;
+}
+
+.text-box-large {
+  font-size: 1.5rem;
+}
+
+.text-annotation {
+  font-size: 1rem;
+  font-style: italic;
+  color: var(--color-shaded);
+}
+
+.text-shaded {
+  color: var(--color-shaded);
+}
+
+/* TODO: move into component */
+.text-kanji-stroke-order {
+  font-size: 6rem;
+  font-family: kanji-stroke-order;
+}
+
+/*============================================================================*
+ * Tables
+ *============================================================================*/
+
+/*----------------------------------------------------------------------------*
+ * Tables: common settings
+ *----------------------------------------------------------------------------*/
+.table-base {
+  text-align: left;
+  border-spacing: var(--grid-gap);
+  /* Undo gap at the edges of the table */
+  margin: calc(-1 * var(--grid-gap));
+}
+
+.table-base td {
+  background-color: var(--color-answer);
+}
+
+/*----------------------------------------------------------------------------*
+ * Tables: details table
+ *----------------------------------------------------------------------------*/
+.table-details td:first-child {
+  /* Make first column minimum-width */
+  white-space: nowrap;
+  width: 1px;
+  font-weight: bold;
+}
+
+.table-details td {
+  padding: 0.6rem 0.9rem;
+  vertical-align: top;
+}
+
+.table-details > ul {
+  margin: 0;
+  padding-left: 0.9rem;
+}
+
+/* Make gap between list items but prevent gap after last item */
+.table-details > ul > div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+/*----------------------------------------------------------------------------*
+ * Tables: kanji table
+ *----------------------------------------------------------------------------*/
+
+.table-kanji td {
+  padding: 0.45rem;
+  font-size: 0.9rem;
+}
+
+.table-kanji td:first-child {
+  /* Make first column minimum-width */
+  white-space: nowrap;
+  width: 1px;
+}
+
+.table-kanji td:nth-child(2) {
+  vertical-align: top;
+}
+
+.left-column-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25em;
+  text-align: center;
+}
+
+.right-column-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+  text-align: left;
+}
+
+.field-kanji {
+  font-size: 4rem;
+  line-height: 1;
+}
+
+.field-stroke-number {
+  color: var(--color-shaded);
+  font-size: 0.8em;
+}
+
+.field-keyword {
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+/* Containing <div> for rows with tags */
+.tag-row {
+  /* Wrap entire tags instead of breaking them up */
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25em;
+}
+
+.tag-reading-base {
+  padding: 0em 0.2em;
+  border: 1px solid black;
+  border-radius: 0.5em;
+}
+
+.tag-on-reading {
+  background-color: var(--color-on-reading);
+}
+
+.tag-kun-reading {
+  background-color: var(--color-kun-reading);
+}
+
+.tag-misc {
+  font-size: 0.8em;
+  padding: 0.2em 0.5em;
+  border: 1px solid black;
+  border-radius: 1em;
+}
+
+/*----------------------------------------------------------------------------*
+ * Toggle furigana button
+ *----------------------------------------------------------------------------*/
+.button-container {
+  text-align: right;
+}
+
+.button-container button {
+  padding: 0.4rem 0.5rem;
+}

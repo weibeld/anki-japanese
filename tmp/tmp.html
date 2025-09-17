@@ -1,0 +1,200 @@
+<script src="_japanese.js"></script>
+<div class="container back">
+  
+  <!--=======================================================================-->
+  <!-- Question Box                                                          -->
+  <!--=======================================================================-->
+  <div class="box question">
+    <div class="text-box-large {{#usually-in-kana}}text-shaded{{/usually-in-kana}}">{{word}}</div>
+    {{#furigana}}
+      <div class="text-box-large {{^usually-in-kana}}text-shaded{{/usually-in-kana}}">{{furigana}}</div>
+    {{/furigana}}
+    {{#usually-in-kana}}
+      <div class="text-annotation">Usually written using kana alone</div>
+    {{/usually-in-kana}}
+    {{#type-noun-suru-verb}}
+      <div class="text-annotation">Noun with Suru-Verb</div>
+    {{/type-noun-suru-verb}}
+  </div>
+
+  <!--=======================================================================-->
+  <!-- Answer Box                                                            -->
+  <!--=======================================================================-->
+  <div class="box answer">
+    <div class="text-box-small">{{translation}}</div>
+    <div class="text-annotation">
+      {{#is-humble-language}}(humble language){{/is-humble-language}}
+      {{#is-honorific-language}}(honorific language){{/is-honorific-language}}
+      {{#is-informal-language}}(informal){{/is-informal-language}}
+      {{#is-polite-language}}(politel){{/is-polite-language}}
+      {{#is-male-language}}(male language){{/is-male-language}}
+      {{#verb-transitivity-pair-verb}}
+        {{#verb-transitive}}(transitive){{/verb-transitive}}
+        {{#verb-intransitive}}(intransitive){{/verb-intransitive}}
+      {{/verb-transitivity-pair-verb}}
+    </div>
+  </div>
+
+  <!--=======================================================================-->
+  <!-- Table                                                                 -->
+  <!--=======================================================================-->
+  <table class="table">
+    <!------------------------------------------------------------------------->
+    <!-- Type                                                                -->
+    <!------------------------------------------------------------------------->
+    <tr>
+      <td>Type</td>
+      <td>
+        {{#type-noun}}Noun{{/type-noun}}
+        {{#type-noun-suru-verb}}Noun with Suru-Verb{{/type-noun-suru-verb}}
+        {{#type-adverb}}Adverb{{/type-adverb}}
+        {{#type-adjective-i}}i-Adjective{{/type-adjective-i}}
+        {{#type-adjective-na}}na-Adjective{{/type-adjective-na}}
+        {{#type-expression}}Expression{{/type-expression}}
+        {{#type-verb}}Verb{{/type-verb}}
+      </td>
+    </tr>
+    {{#type-verb}}
+      <!----------------------------------------------------------------------->
+      <!-- Verb group                                                        -->
+      <!----------------------------------------------------------------------->
+      <tr>
+        <td>Verb group</td>
+        <td>
+          {{#verb-group-1-godan}}Group 1 (godan/u-verb){{/verb-group-1-godan}}
+          {{#verb-group-2-ichidan}}Group 2 (ichidan/ru-verb){{/verb-group-2-ichidan}}
+        </td>
+      </tr>
+      <!----------------------------------------------------------------------->
+      <!-- Transitivity                                                      -->
+      <!----------------------------------------------------------------------->
+      <tr>
+        <td>Transitivity</td>
+        <td>
+          {{#verb-transitive}}Transitive{{/verb-transitive}}
+          {{#verb-intransitive}}Intransitive{{/verb-intransitive}}
+        </td>
+      </tr>
+      {{#verb-transitivity-pair-verb}}
+        <!--------------------------------------------------------------------->
+        <!-- Transitivity counterpart                                        -->
+        <!--------------------------------------------------------------------->
+        <tr>
+          <td>Counterpart</td>
+          <td>
+            {{verb-transitivity-pair-verb}}
+            {{#verb-transitive}}<span class="text-annotation">(intransitive)</span>{{/verb-transitive}}
+            {{#verb-intransitive}}<span class="text-annotation">(transitive)</span>{{/verb-intransitive}}
+          </td>
+        </tr>
+      {{/verb-transitivity-pair-verb}}
+    {{/type-verb}}
+    <!------------------------------------------------------------------------->
+    <!-- Suru-Verb                                                           -->
+    <!------------------------------------------------------------------------->
+    {{#type-noun-suru-verb}}
+    <tr>
+      <td>Transitivity</td>
+      <td>
+        {{#suru-verb-transitive}}Transitive{{/suru-verb-transitive}}
+        {{#suru-verb-intransitive}}Intransitive{{/suru-verb-intransitive}}
+      </td>
+    </tr>
+    {{/type-noun-suru-verb}}
+
+    <!------------------------------------------------------------------------->
+    <!-- Ateji and jukujikun                                                 -->
+    <!------------------------------------------------------------------------->
+    {{#is-jukujikun}}
+    <tr><td>Kanji</td><td>Jukujikun (熟字訓): kanji used for meaning, not sound.</td></tr>
+    {{/is-jukujikun}}
+    {{#is-ateji}}
+      <tr><td>Kanji</td><td>Ateji (当て字): kanji used for sound, not meaning.</td></tr> 
+    {{/is-ateji}}
+
+    <!------------------------------------------------------------------------->
+    <!-- Examples                                                            -->
+    <!------------------------------------------------------------------------->
+    {{#example-1}}
+    <tr>
+      <td>Examples</td>
+      <td>
+        <ul>
+          <div>
+            <li>
+              {{example-1}}
+              <div class="text-annotation">{{example-1-translation}}</div>
+            </li>
+            {{#example-2}}
+              <li>
+                {{example-2}}
+                <div class="text-annotation">{{example-2-translation}}</div>
+              </li>
+            {{/example-2}}
+            {{#example-3}}
+              <li>
+                {{example-3}}
+                <div class="text-annotation">{{example-3-translation}}</div>
+              </li>
+            {{/example-3}}
+          </div>
+        <ul>
+      </td>
+    </tr>
+    {{/example-1}}
+
+    <!------------------------------------------------------------------------->
+    <!-- Notes                                                               -->
+    <!------------------------------------------------------------------------->
+    {{#note-1}}
+    <tr>
+      <td>Notes</td>
+      <td>
+        <ul>
+          <div>
+            <li>{{note-1}}</li>
+            {{#note-2}}
+              <li>{{note-2}}</li>
+            {{/note-2}}
+            {{#note-3}}
+              <li>{{note-3}}</li>
+            {{/note-3}}
+          </div>
+        <ul>
+      </td>
+    </tr>
+    {{/note-1}}
+
+    <!------------------------------------------------------------------------->
+    <!-- See also                                                            -->
+    <!------------------------------------------------------------------------->
+    {{#see-also-1}}
+    <tr>
+      <td>See also</td>
+      <td>
+        <ul>
+          <div>
+            <li>
+              {{see-also-1}}
+              <span class="text-annotation">({{see-also-1-comment}})</span>
+            </li>
+            {{#see-also-2}}
+              <li>
+                {{see-also-2}}
+                <span class="text-annotation">({{see-also-2-comment}})</span>
+              </li>
+            {{/see-also-2}}
+            {{#see-also-3}}
+              <li>
+                {{see-also-3}}
+                <span class="text-annotation">({{see-also-3-comment}})</span>
+              </li>
+            {{/see-also-3}}
+          </div>
+        <ul>
+      </td>
+    </tr>
+    {{/see-also-1}}
+  </table>
+
+</div>
