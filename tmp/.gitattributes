@@ -1,0 +1,2 @@
+kanjiapi_full.json filter=lfs diff=lfs merge=lfs -text
+data-clean.json filter=lfs diff=lfs merge=lfs -text
